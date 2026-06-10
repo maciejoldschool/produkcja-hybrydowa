@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produkcja hybrydowa generatywno-zdjęciowa — Maciej Żemojcin</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black:   #070707;
+    --dark:    #0e0e0e;
+    --dark2:   #161616;
+    --dark3:   #202020;
+    --border:  #272727;
+    --mid:     #505050;
+    --dim:     #686868;
+    --light:   #888888;
+    --silver:  #b4b4b4;
+    --white:   #f0f0f0;
+    --pure:    #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ══════════════════════════════════════════════
+     SLAJD PEŁNOEKRANOWY — wspólny pattern
+     cover · chapter break · outro
+  ══════════════════════════════════════════════ */
+  .slide {
+    min-height: 100vh;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 44px 60px;
+  }
+
+  .slide-meta {
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    color: var(--dim);
+    font-weight: 400;
+  }
+
+  .slide-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 64px 0;
+    gap: 20px;
+  }
+
+  .slide-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+    font-weight: 500;
+  }
+
+  .slide-title {
+    font-size: clamp(36px, 5.5vw, 72px);
+    font-weight: 300;
+    color: var(--pure);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    max-width: 900px;
+  }
+
+  .slide-subtitle {
+    font-size: clamp(15px, 1.8vw, 20px);
+    font-weight: 300;
+    color: var(--dim);
+    letter-spacing: 0.01em;
+    max-width: 640px;
+    line-height: 1.5;
+  }
+
+  .slide-foot {
+    font-size: 12px;
+    color: var(--mid);
+    max-width: 520px;
+    line-height: 1.65;
+  }
+
+  /* ══════════════════════════════════════════════
+     SEKCJA TREŚCI — wspólny pattern
+     video · legal
+  ══════════════════════════════════════════════ */
+  .content {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 80px 60px;
+  }
+
+  .content-rule {
+    height: 1px;
+    background: var(--border);
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  /* Nagłówek sekcji */
+  .sec-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .sec-heading {
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--pure);
+    margin-bottom: 56px;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── VIDEO BLOCKS ── */
+  .video-block { margin-bottom: 72px; }
+  .video-block:last-child { margin-bottom: 0; }
+
+  .video-header {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 14px;
+  }
+  .video-seq {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mid);
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .video-title {
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--white);
+  }
+  .video-wrap {
+    padding: 56.25% 0 0 0;
+    position: relative;
+    background: #000;
+    border: 1px solid var(--border);
+  }
+  .video-wrap iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+  .video-desc {
+    font-size: 13px;
+    color: var(--light);
+    margin-top: 16px;
+    max-width: 760px;
+    line-height: 1.7;
+  }
+  .video-note {
+    font-size: 12px;
+    color: var(--mid);
+    margin-top: 8px;
+    font-style: italic;
+    max-width: 760px;
+    line-height: 1.6;
+  }
+
+  /* ── KPI ROW ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--border);
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+  .kpi-item {
+    padding: 24px 28px;
+    border-right: 1px solid var(--border);
+  }
+  .kpi-item:last-child { border-right: none; }
+  .kpi-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  .kpi-value {
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--pure);
+    margin-bottom: 4px;
+  }
+  .kpi-sub { font-size: 11px; color: var(--dim); }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    display: flex;
+    border: 1px solid var(--border);
+    margin-bottom: 48px;
+    overflow: hidden;
+  }
+  .tl-step {
+    flex: 1;
+    padding: 20px 22px;
+    border-right: 1px solid var(--border);
+  }
+  .tl-step:last-child { border-right: none; }
+  .tl-step.tl-future { opacity: 0.38; }
+  .tl-badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border: 1px solid var(--border);
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--dim);
+  }
+  .tl-badge.tl-done   { border-color: #333; color: var(--light); }
+  .tl-badge.tl-now    { border-color: #3a3a3a; color: var(--silver); }
+  .tl-date { font-size: 12px; font-weight: 500; color: var(--silver); margin-bottom: 5px; }
+  .tl-text { font-size: 11px; color: var(--dim); line-height: 1.5; }
+
+  /* ── COMPLIANCE TABLE ── */
+  .table-wrap {
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    margin-bottom: 48px;
+  }
+  .c-table { width: 100%; border-collapse: collapse; }
+  .c-table thead th {
+    background: var(--dark2);
+    padding: 13px 20px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .c-table tbody tr { border-bottom: 1px solid var(--border); }
+  .c-table tbody tr:last-child { border-bottom: none; }
+  .c-table tbody tr:hover { background: rgba(255,255,255,0.015); }
+  .c-table td { padding: 16px 20px; vertical-align: top; font-size: 12.5px; }
+
+  .td-cat { min-width: 170px; max-width: 185px; }
+  .cat-name { font-weight: 500; color: var(--white); margin-bottom: 3px; font-size: 13px; }
+  .cat-ref  { font-size: 11px; color: var(--mid); }
+
+  .td-req { color: var(--silver); min-width: 240px; font-size: 12px; line-height: 1.65; }
+  .td-val { min-width: 260px; font-size: 12px; line-height: 1.65; color: var(--light); }
+  .ok     { color: var(--silver); }
+
+  /* ── INFO BOX ── */
+  .info-box {
+    border: 1px solid var(--border);
+    background: var(--dark);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+  }
+  .info-box-heading {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--silver);
+    margin-bottom: 22px;
+    font-weight: 500;
+  }
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 40px;
+  }
+  .info-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .info-dash { color: var(--mid); flex-shrink: 0; font-size: 12px; margin-top: 1px; }
+  .info-text { font-size: 12px; color: var(--dim); line-height: 1.65; }
+  .info-text strong { color: var(--white); font-weight: 500; }
+
+  /* ── NOTE / FOOTNOTES ── */
+  .note-box {
+    border: 1px solid var(--border);
+    padding: 18px 22px;
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+  .footnotes {
+    border-top: 1px solid var(--border);
+    padding-top: 22px;
+    font-size: 11px;
+    color: var(--mid);
+    line-height: 1.85;
+  }
+  .footnotes a { color: var(--dim); text-decoration: none; }
+  .footnotes a:hover { color: var(--silver); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .slide, .content { padding: 36px 24px; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .info-grid { grid-template-columns: 1fr; }
+    .timeline { flex-direction: column; }
+    .tl-step { border-right: none; border-bottom: 1px solid var(--border); }
+    .tl-step:last-child { border-bottom: none; }
+    .slide-title { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     01 · OKŁADKA
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-meta">Maciej Żemojcin &nbsp;·&nbsp; 11.06.2026</div>
+  <div class="slide-body">
+    <h1 class="slide-title">Produkcja hybrydowa<br>generatywno-zdjęciowa</h1>
+  </div>
+  <p class="slide-foot">
+    Zastrzeżenie: przykłady zostały wygenerowane wyłącznie w celach poglądowych dla potrzeb niniejszej prezentacji i nie będą wykorzystywane w innych celach.
+  </p>
+</div>
+
+<!-- ════════════════════════════════════════════
+     02 · MATERIAŁY WIDEO
+════════════════════════════════════════════ -->
+<div class="content-rule"></div>
+<div class="content">
+
+  <p class="sec-label">Przykłady produkcyjne</p>
+  <h2 class="sec-heading">Materiały</h2>
+
+  <!-- SCENA 1 -->
+  <div class="video-block">
+    <div class="video-header">
+      <span class="video-seq">Scena 1</span>
+      <span class="video-title">Uzupełnienie ujęć — oryginał</span>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://player.vimeo.com/video/1200273987?h=4b9be9882f&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+        frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" title="Scena 1"></iframe>
+    </div>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    <p class="video-desc">Uzupełnienie ujęć: ujęcie totalne z drona, wysokość pala, zbliżenie na protetykę, dorobienie ujęć na które nie było czasu.</p>
+  </div>
+
+  <!-- SCENA 2 -->
+  <div class="video-block">
+    <div class="video-header">
+      <span class="video-seq">Scena 2</span>
+      <span class="video-title">Uzupełnienie grafiki i skali — oryginał</span>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://player.vimeo.com/video/1200273986?h=83bcf52bc8&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+        frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" title="Scena 2"></iframe>
+    </div>
+    <p class="video-desc">Uzupełnienie ujęć: uzupełnienie grafiki 3D, dorobienie skali miasta 3D, dorobienie ujęć FX z drona.</p>
+  </div>
+
+  <!-- SCENA 3 -->
+  <div class="video-block">
+    <div class="video-header">
+      <span class="video-seq">Scena 3</span>
+      <span class="video-title">Statyści i detale efektowe — oryginał</span>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://player.vimeo.com/video/1200273985?h=1f4b5972aa&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+        frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" title="Scena 3"></iframe>
+    </div>
+    <p class="video-desc">Uzupełnienie ujęć: ujęcia z dużą ilością statystów i koni, detale efektowe np. flaga, kopyta.</p>
+  </div>
+
+  <!-- END EXAMPLE -->
+  <div class="video-block">
+    <div class="video-header">
+      <span class="video-seq">Przykład</span>
+      <span class="video-title">Zakończenie odcinka — Oryginał vs Uzupełniony AI</span>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://player.vimeo.com/video/1200274036?h=ac2cdef783&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+        frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" title="End example"></iframe>
+    </div>
+    <p class="video-desc">Dorobienie krótkich ujęć w celu efektowniejszego zakończenia odcinka.</p>
+  </div>
+
+  <!-- BITWA -->
+  <div class="video-block">
+    <div class="video-header">
+      <span class="video-seq">Przykład</span>
+      <span class="video-title">Ujęcia kaskaderskie — Oryginał vs Uzupełniony AI</span>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://player.vimeo.com/video/1200273984?h=3ac0cbc423&title=0&byline=0&portrait=0&badge=0&autopause=0&player_id=0&app_id=58479"
+        frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" title="Bitwa przykład"></iframe>
+    </div>
+    <p class="video-desc">Dorobienie ujęć kaskaderskich.</p>
+    <p class="video-note">Ze względu na poglądowy charakter prezentacji materiał nie był konsultowany historycznie. Materiał finalny będzie wymagał konsultacji ekspertów.</p>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════
+     03 · SLAJD ROZDZIAŁOWY — ANALIZA PRAWNA
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-meta">Maciej Żemojcin &nbsp;·&nbsp; 11.06.2026</div>
+  <div class="slide-body">
+    <span class="slide-eyebrow">Część II</span>
+    <h2 class="slide-title">Analiza prawna partnera</h2>
+    <p class="slide-subtitle">Analiza prawna dostawcy modeli generatywnych</p>
+  </div>
+  <div class="slide-foot"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     04 · ZGODNOŚĆ REGULACYJNA — MAGNIFIC / EU AI ACT
+════════════════════════════════════════════ -->
+<div class="content-rule"></div>
+<div class="content">
+
+  <p class="sec-label">Zgodność regulacyjna</p>
+  <h2 class="sec-heading">Magnific (Freepik) — EU AI Act</h2>
+
+  <!-- KPI -->
+  <div class="kpi-row">
+    <div class="kpi-item">
+      <div class="kpi-label">Ochrona IP producenta</div>
+      <div class="kpi-value">Pełna</div>
+      <div class="kpi-sub">Indemnifikacja Enterprise MSA</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">Jurysdykcja</div>
+      <div class="kpi-value">Hiszpania / UE</div>
+      <div class="kpi-sub">Wyroki wykonalne w Polsce</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">Dane producenta</div>
+      <div class="kpi-value">Nie trenuje</div>
+      <div class="kpi-sub">Gwarancja Enterprise MSA</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-label">RODO</div>
+      <div class="kpi-value">Natywnie</div>
+      <div class="kpi-sub">Firma UE, dane w EOG</div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline">
+    <div class="tl-step">
+      <span class="tl-badge tl-done">Obowiązuje</span>
+      <div class="tl-date">Sierpień 2024</div>
+      <div class="tl-text">Wejście w życie EU AI Act</div>
+    </div>
+    <div class="tl-step">
+      <span class="tl-badge tl-done">Obowiązuje</span>
+      <div class="tl-date">Sierpień 2025</div>
+      <div class="tl-text">Art. 53 GPAI — dane treningowe + polityka copyright</div>
+    </div>
+    <div class="tl-step">
+      <span class="tl-badge tl-now">Nadchodzi</span>
+      <div class="tl-date">Sierpień 2026</div>
+      <div class="tl-text">Art. 50 — znakowanie treści AI (watermarking)</div>
+    </div>
+    <div class="tl-step tl-future">
+      <span class="tl-badge">Przyszłość</span>
+      <div class="tl-date">Sierpień 2027</div>
+      <div class="tl-text">Pełne egzekwowanie + modele wysokiego ryzyka systemowego</div>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table class="c-table">
+      <thead>
+        <tr>
+          <th style="width:185px">Kategoria</th>
+          <th style="width:260px">Wymaganie EU AI Act</th>
+          <th>Magnific / Freepik (UE)</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">Dane treningowe</div>
+            <div class="cat-ref">Art. 53(1)(d)</div>
+          </td>
+          <td class="td-req">Dostawca GPAI musi opublikować streszczenie treści użytych do trenowania modelu.</td>
+          <td class="td-val">
+            <span class="ok">Enterprise MSA: dane producenta nie są używane do trenowania ani fine-tuningu modeli AI — gwarantowane umownie.</span>
+            Jako firma UE Magnific ma ustawowy obowiązek publikacji streszczenia Art. 53 i aktywnie go realizuje.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">Polityka praw autorskich</div>
+            <div class="cat-ref">Art. 53(1)(c)</div>
+          </td>
+          <td class="td-req">Dostawca GPAI musi wdrożyć politykę copyright z mechanizmem opt-out (Dyrektywa 2019/790 Art. 4(3)).</td>
+          <td class="td-val">
+            <span class="ok">Freepik/Magnific od ponad dekady operuje na w pełni licencjonowanych treściach — compliance copyright to rdzeń modelu biznesowego.</span>
+            Opublikowana strona „AI content and copyright". Podlega Dyrektywie UE 2019/790 bezpośrednio.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">Dokumentacja techniczna</div>
+            <div class="cat-ref">Art. 53(1)(a)(b)</div>
+          </td>
+          <td class="td-req">Dostawca GPAI musi opublikować dokumentację techniczną modelu.</td>
+          <td class="td-val">
+            <span class="ok">Firma UE z ustawowym obowiązkiem zgodności z Art. 53, odpowiadająca bezpośrednio przed regulatorem UE.</span>
+            Dedykowane strony: „Legal and compliance" oraz „Enterprise content and legal".
+          </td>
+        </tr>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">Znakowanie AI</div>
+            <div class="cat-ref">Art. 50(2) — od sie. 2026</div>
+          </td>
+          <td class="td-req">Treści wideo generowane przez AI muszą być oznaczone maszynoczytelnym watermarkiem.</td>
+          <td class="td-val">
+            <span class="ok">Magnific jako firma UE ma ustawowy obowiązek wdrożenia Art. 50 i odpowiada przed regulatorem bezpośrednio.</span>
+            Ewentualna odpowiedzialność za brak watermarkingu spoczywa na Magnific, nie na producencie.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">RODO — Transfer danych</div>
+            <div class="cat-ref">RODO Art. 44–46</div>
+          </td>
+          <td class="td-req">Transfer danych poza EOG wymaga decyzji o adekwatności lub standardowych klauzul umownych.</td>
+          <td class="td-val">
+            <span class="ok">Freepik Company S.L.U. — firma UE z siedzibą w Maladze. Dane przetwarzane w EOG, RODO stosuje się bezpośrednio.</span>
+            DPA Art. 28 dostępne do podpisania.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">Dane biometryczne</div>
+            <div class="cat-ref">RODO Art. 9</div>
+          </td>
+          <td class="td-req">Przetwarzanie twarzy i głosów wymaga wyraźnej podstawy prawnej.</td>
+          <td class="td-val">
+            <span class="ok">Firma UE — RODO Art. 9 stosuje się bezpośrednio, przetwarzanie w EOG.</span>
+            Enterprise MSA: brak użycia danych producenta do trenowania. Możliwość DPA z klauzulami dot. danych biometrycznych.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">Indemnifikacja producenta</div>
+            <div class="cat-ref">Enterprise MSA</div>
+          </td>
+          <td class="td-req">Przejęcie obrony prawnej i kosztów w razie roszczenia IP od osoby trzeciej wobec producenta.</td>
+          <td class="td-val">
+            <span class="ok">Plan Enterprise: Magnific indemnyfikuje producenta od roszczeń IP dotyczących AI-generated Output.</span>
+            Zakres: stock content i AI-generated output. Producent tworzy z pełnym oparciem prawnym.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">Własność contentu</div>
+            <div class="cat-ref">ToS / IP Ownership</div>
+          </td>
+          <td class="td-req">Producent zachowuje pełne prawa do wygenerowanego contentu.</td>
+          <td class="td-val">
+            <span class="ok">Enterprise MSA: producent posiada wszystkie prawa do Output — pełna swoboda użycia, modyfikacji i komercjalizacji.</span>
+            Magnific nie rości sobie praw do wygenerowanego contentu.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="td-cat">
+            <div class="cat-name">Jurysdykcja</div>
+            <div class="cat-ref">Governing Law</div>
+          </td>
+          <td class="td-req">Spory powinny być rozstrzygane w jurysdykcji europejskiej z realną możliwością egzekucji wyroku.</td>
+          <td class="td-val">
+            <span class="ok">Prawo hiszpańskie, sądy w Maladze.</span>
+            Wyroki wykonalne w Polsce na mocy Rozp. Bruksela I (nr 1215/2012).
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- INFO BOX -->
+  <div class="info-box">
+    <div class="info-box-heading">Warunki Enterprise MSA — aktywacja pełnej ochrony</div>
+    <div class="info-grid">
+      <div class="info-row">
+        <span class="info-dash">—</span>
+        <p class="info-text"><strong>Enterprise MSA</strong> — indemnyfikacja obejmuje plan Enterprise, nie Standard. Wymaga podpisania umowy.</p>
+      </div>
+      <div class="info-row">
+        <span class="info-dash">—</span>
+        <p class="info-text"><strong>DPA Art. 28 RODO</strong> — zalecane do podpisania w celu formalnej ochrony danych biometrycznych.</p>
+      </div>
+      <div class="info-row">
+        <span class="info-dash">—</span>
+        <p class="info-text"><strong>Zakres video generation</strong> — zalecane potwierdzenie, że indemnyfikacja obejmuje generowanie wideo (nie tylko obrazów).</p>
+      </div>
+      <div class="info-row">
+        <span class="info-dash">—</span>
+        <p class="info-text"><strong>Wyłączenia</strong> — indemnifikacja nie obejmuje: znaków towarowych w promptach, nieautoryzowanego inputu, celowych naruszeń.</p>
+      </div>
+      <div class="info-row">
+        <span class="info-dash">—</span>
+        <p class="info-text"><strong>Watermarking Art. 50</strong> — zalecane pisemne potwierdzenie wdrożenia przed 2 sierpnia 2026.</p>
+      </div>
+      <div class="info-row">
+        <span class="info-dash">—</span>
+        <p class="info-text"><strong>Zakaz trenowania</strong> — mimo deklaracji standardowej, zalecane zapisanie tego explicite w MSA.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTE -->
+  <div class="note-box">
+    Eksterytorialność EU AI Act: rozporządzenie stosuje się do deployerów na rynku UE niezależnie od siedziby dostawcy. Producent działający w Polsce podlega EU AI Act od teraz.
+  </div>
+
+  <!-- FOOTNOTES -->
+  <div class="footnotes">
+    <p>[1] <a href="https://www.magnific.com/ai/docs/enterprise-content-and-legal">Magnific — Enterprise content and legal</a></p>
+    <p>[2] <a href="https://www.magnific.com/ai/docs/legal-and-compliance">Magnific — Legal and compliance</a></p>
+    <p>[3] <a href="https://www.magnific.com/ai/docs/ai-content-and-copyright">Magnific — AI content and copyright</a></p>
+    <p>[4] <a href="https://eur-lex.europa.eu/legal-content/PL/TXT/?uri=CELEX:32024R1689">Rozporządzenie EU 2024/1689 — EU AI Act</a></p>
+    <p>[5] Rozporządzenie (UE) nr 1215/2012 (Bruksela I) — jurysdykcja i wykonywanie wyroków w UE</p>
+    <p style="margin-top:14px; color:var(--mid)">Analiza przygotowana na podstawie publicznie dostępnych dokumentów prawnych (czerwiec 2026). Nie stanowi porady prawnej.</p>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════
+     05 · OUTRO
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-meta">Maciej Żemojcin &nbsp;·&nbsp; 11.06.2026</div>
+  <div class="slide-body">
+    <h2 class="slide-title">Dziękujemy za uwagę</h2>
+  </div>
+  <p class="slide-foot">
+    Zastrzeżenie: przykłady zostały wygenerowane wyłącznie w celach poglądowych dla potrzeb niniejszej prezentacji i nie będą wykorzystywane w innych celach.
+  </p>
+</div>
+
+</body>
+</html>
